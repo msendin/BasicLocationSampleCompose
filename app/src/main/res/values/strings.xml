@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BasicLocationSampleCompose</string>
+    <string name="failed">Failed on getting current location</string>
+</resources>
