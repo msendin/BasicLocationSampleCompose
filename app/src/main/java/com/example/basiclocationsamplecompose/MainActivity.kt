@@ -93,8 +93,6 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun LocationScreen(
         context: Context,
-        //currentLatitude: MutableState<String>,
-        //currentLongitude: MutableState<String>,
         loc: MutableState<Location?>
         ) {
         val launchMultiplePermissions= rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions() )
