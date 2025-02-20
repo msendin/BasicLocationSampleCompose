@@ -3,6 +3,7 @@ package com.example.basiclocationsamplecompose
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -42,8 +43,10 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.ACCESS_COARSE_LOCATION,
     )
 
-    private var mCurrentLastLocationLatitude = mutableStateOf("0.0")
-    private var mCurrentLastLocationLongitude = mutableStateOf("0.0")
+    //private var mCurrentLastLocationLatitude = mutableStateOf("0.0")
+    //private var mCurrentLastLocationLongitude = mutableStateOf("0.0")
+
+    private var mLocation: MutableState<Location?> = mutableStateOf(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +64,7 @@ class MainActivity : ComponentActivity() {
                     contentColor = Color.Blue,
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LocationScreen(this@MainActivity, mCurrentLastLocationLatitude, mCurrentLastLocationLongitude)
+                    LocationScreen(this@MainActivity, mLocation)
                 }
             }
         }
@@ -77,8 +80,9 @@ class MainActivity : ComponentActivity() {
 
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 // Got last known location. In some rare situations this can be null
-                mCurrentLastLocationLatitude.value = (location?.latitude?: 0.0).toString()
-                mCurrentLastLocationLongitude.value = (location?.longitude?: 0.0).toString()
+                //mCurrentLastLocationLatitude.value = (location?.latitude?: 0.0).toString()
+                //mCurrentLastLocationLongitude.value = (location?.longitude?: 0.0).toString()
+                mLocation.value = location?: null
             }
                 .addOnFailureListener {
                     Toast.makeText(this,getString(R.string.failed), Toast.LENGTH_SHORT).show()
@@ -89,8 +93,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun LocationScreen(
         context: Context,
-        currentLatitude: MutableState<String>,
-        currentLongitude: MutableState<String>,
+        //currentLatitude: MutableState<String>,
+        //currentLongitude: MutableState<String>,
+        loc: MutableState<Location?>
         ) {
         val launchMultiplePermissions= rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions() )
         {
@@ -125,7 +130,7 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = "Your location is ${(currentLatitude.value)} and ${(currentLongitude.value)}",
+                Text(text = "Your location is ${(loc.value)?.latitude} and ${(loc.value)?.longitude}",
                     color = Color.Black)
                 Button(onClick = {
                     if (permissions.all {
