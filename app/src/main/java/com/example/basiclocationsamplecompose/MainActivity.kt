@@ -131,12 +131,13 @@ class MainActivity : ComponentActivity() {
                 Text(text = "Your location is ${(loc.value)?.latitude} and ${(loc.value)?.longitude}",
                     color = Color.Black)
                 Button(onClick = {
-                    if (!permissions.all {
+                    if (permissions.all {
                             ContextCompat.checkSelfPermission(
                                 context,
                                 it
                             ) == PackageManager.PERMISSION_GRANTED
-                        }) {
+                        }) getLastLocation()
+                    else {
                         launchMultiplePermissions.launch(permissions)
                     }
                 }) {
